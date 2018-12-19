@@ -11,4 +11,3 @@ Components:
 Installation:
   * Create Database "angularjs_php_crud".
   * Import "angularjs_php_crud.sql".
-  * Done.
