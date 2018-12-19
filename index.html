@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+  <title>Todo List</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SIMPLE ANGULARJS PHP CRUD">
+  <!-- TAB ICON  -->
+  <link rel="icon" href="assets/img/verified-list-interface-symbol.png">
+  <!-- MAIN STYLE -->
+  <link type="text/css" rel="stylesheet" href="assets/css/style.css">
+  <!-- BOOTSTRAP -->
+  <link type="text/css" rel="stylesheet" href="assets/lib/bootstrap/css/bootstrap.min.css">
+  <!-- NG UI NOTIFICATION -->
+  <link rel="stylesheet" type="text/css" href="assets/lib/angular-ui-notification/css/angular-ui-notification.css">
+</head>
+<body ng-app="app" ng-controller="todoController">
+  <header class="mb20 shadow__b">
+    <nav class="navbar navbar-light bg-light">
+      <span class="navbar-brand mb-0 h1">SIMPLE ANGULARJS PHP CRUD</span>
+    </nav>
+  </header>
+  <div class="container">
+    <div class="card mb20">
+      <div class="card-header">
+        Todo List
+      </div>
+      <div class="card-body">
+        <div class="mb20">
+          <button class="btn btn-info" ng-click="createModal()">Create</button>
+        </div>
+        <div class="custom-list mb20">
+          <div class="custom-header">
+            <div class="item">
+              <thead>
+                <table width="100%">
+                  <tr>
+                    <th>Todo</th>
+                  </tr>
+                </table>
+              </thead>
+            </div>
+          </div>
+          <div class="custom-body">
+            <div class="item" ng-show="!todos.length">
+              <table width="100%">
+                <td class="text-danger font-weight-bold">No records found!</td>
+              </table>
+            </div>
+            <div class="item" ng-repeat="todo in todos.slice(((currentPage - 1) * itemsPerPage), ((currentPage) * itemsPerPage))">
+              <table width="100%">
+                <td width="75%">
+                  {{ todo.todo }}
+                </td>
+                <td class="text-center p0">
+                  <a href="javascript:void(0);" class="text-info" ng-click="bindTodo(todo)">Update</a>
+                </td>
+                <td class="text-center p0">
+                  <a href="javascript:void(0);" class="text-danger" ng-click="deleteTodo(todo)">Delete</a>
+                </td>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div uib-pagination total-items="todos.length" ng-model="currentPage" max-size="maxSize" boundary-links="true" force-ellipses="true" style="float: right;"></div>
+      </div>
+    </div>
+    <div class="modal fade" id="updateTodoModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <form name="updateForm" ng-submit="updateTodo()" novalidate>
+            <div class="modal-header">
+              <h5 class="modal-title">Create Todo</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group" ng-class="updateForm.todo.$invalid && !updateForm.todo.$pristine? 'has-error' : 'has-success' ">
+                <label for="todo">Todo <span class="text-danger">*</span></label>
+                <input type="text" name="todo" ng-model="todo.todo" class="form-control" autocomplete="false" minlength="3" maxlength="20" required>
+                <div ng-show="updateForm.todo.$invalid && updateForm.todo.$dirty">
+                  <small ng-show="updateForm.todo.$error.required" class="text-danger">This field is required</small>
+                  <small ng-show="updateForm.todo.$error.minlength" class="text-danger">Too short</small>
+                  <small ng-show="updateForm.todo.$error.maxlength" class="text-danger">Too long</small>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-info" ng-disabled="updateForm.$invalid">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="createTodoModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <form name="createForm" ng-submit="createTodo()" novalidate>
+            <div class="modal-header">
+              <h5 class="modal-title">Create Todo</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group" ng-class="createForm.todo.$invalid && !createForm.todo.$pristine? 'has-error' : 'has-success' ">
+                <label for="todo">Todo <span class="text-danger">*</span></label>
+                <input type="text" name="todo" ng-model="todo.todo" class="form-control" autocomplete="false" minlength="3" maxlength="20" required>
+                <div ng-show="createForm.todo.$invalid && createForm.todo.$dirty">
+                  <small ng-show="createForm.todo.$error.required" class="text-danger">This field is required</small>
+                  <small ng-show="createForm.todo.$error.minlength" class="text-danger">Too short</small>
+                  <small ng-show="createForm.todo.$error.maxlength" class="text-danger">Too long</small>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-info" ng-disabled="createForm.$invalid">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="mb20">
+    <div class="text-center">&copy; All rights reserved 2018</div>
+  </footer>
+  <!-- JQUERY -->
+  <script src="assets/lib/jquery/jquery-3.3.1.min.js"></script>
+  <!-- MAIN JS -->
+  <script src="assets/js/main.js"></script>
+  <!-- POPPER -->
+  <script src="assets/lib/popper/popper.js"></script>
+  <!-- BOOTSTRAP -->
+  <script src="assets/lib/bootstrap/js/bootstrap.min.js"></script>
+  <!-- NG JS -->
+  <script src="assets/lib/angularjs/angular.min.js"></script>
+  <!-- NG UI NOTIFICATION -->
+  <script src="assets/lib/angular-ui-notification/js/angular-ui-notification.js"></script>
+  <!-- NG UI BOOTSTRAP -->
+  <script src="assets/lib/angular-ui-bootstrap/ui-bootstrap-tpls-3.0.6.min.js"></script>
+  <!-- NG APP -->
+  <script src="app/app.js"></script>
+  <!-- NG UI NOTIFICATION SERVICE -->
+  <script src="app/services/NotificationConfig.js"></script>
+  <!-- NG TODO CONTROLLER -->
+  <script src="app/controllers/todoController.js"></script>
+  <!-- NG TODO FACTORY -->
+  <script src="app/factories/todoFactory.js"></script>
+</body>
+</html>
