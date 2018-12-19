@@ -65,6 +65,6 @@ switch($function) {
     break;
     
   default:
-    header('Location: ../../error/404.php');
+    header('Location: ../../error/404.html');
     break;
 }
